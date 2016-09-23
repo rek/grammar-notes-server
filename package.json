@@ -1,0 +1,75 @@
+{
+  "name": "grammar-notes-server",
+  "version": "0.0.1",
+  "description": "API for Grammar Notes system.",
+  "main": "server.js",
+  "engine": {
+    "node": "*",
+    "npm": "*"
+  },
+  "paths": {
+    "bower": "bower_components",
+    "jspm": "jspm_packages",
+    "dist": "dist"
+  },
+  "options": {
+    "test": true
+  },
+  "scripts": {
+    "start": "node server.js",
+    "hero": "heroku local web",
+    "test": "gulp test",
+    "build": "gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rek/grammar-notes-server.git"
+  },
+  "author": "Adam Tombleson <rekarnar@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rek/grammar-notes-server.git/issues"
+  },
+  "homepage": "https://github.com/rek/grammar-notes-server.git",
+  "dependencies": {
+    "aws-sdk": "^2.5.0",
+    "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "mocha": "^2.4.5",
+    "mongodb": "^2.1.16",
+    "morgan": "^1.7.0",
+    "object-assign": "4.1.0",
+    "pg": "6.0.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.5.0",
+    "babel-eslint": "^6.1.2",
+    "babel-polyfill": "^6.5.0",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "eslint": "^3.3.1",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-react": "^6.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-changed": "^1.3.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-copy": "0.0.2",
+    "gulp-env": "^0.4.0",
+    "gulp-load-plugins": "^1.2.4",
+    "gulp-mocha": "^2.2.0",
+    "gulp-newer": "^1.2.0",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-task-loader": "^1.4.4",
+    "gulp-watch": "^4.3.8",
+    "http-server": "^0.9.0",
+    "isparta": "^4.0.0",
+    "istanbul": "gotwarlost/istanbul.git#source-map",
+    "jspm": "^0.16.24",
+    "merge-stream": "^1.0.0",
+    "systemjs": "^0.19.15"
+  }
+}
