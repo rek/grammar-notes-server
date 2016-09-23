@@ -2,6 +2,8 @@
 
 import pg from 'pg'
 import express from 'express'
+import cors from 'cors'
+
 // import fs from 'fs'
 // import eps from 'ejs'
 import morgan from 'morgan'
@@ -20,13 +22,12 @@ let app = express(),
 app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
-app.set('views', __dirname + '/../client')
-
-app.use('/scripts', express.static(__dirname + '/../client/scripts'))
-app.use('/styles', express.static(__dirname + '/../client/styles'))
-app.use('/config.js', express.static(__dirname + '/../../config.js'))
-app.use('/jspm_packages', express.static(__dirname + '/../../jspm_packages'))
-app.use('/favicon.ico', express.static(__dirname + '/../client/favicon.ico'))
+// app.set('views', __dirname + '/../client')
+// app.use('/scripts', express.static(__dirname + '/../client/scripts'))
+// app.use('/styles', express.static(__dirname + '/../client/styles'))
+// app.use('/config.js', express.static(__dirname + '/../../config.js'))
+// app.use('/jspm_packages', express.static(__dirname + '/../../jspm_packages'))
+// app.use('/favicon.ico', express.static(__dirname + '/../client/favicon.ico'))
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -63,24 +64,26 @@ let runServer = () => {
 
 			if (devMode) {
 				console.log('Loading CORS Headers...');
+				app.use(cors());
+
 				// Add CORS headers - DEV
-				app.use(function (req, res, next) {
-					// Website you wish to allow to connect
-					res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8090');
+				// app.use(function (req, res, next) {
+				// 	// Website you wish to allow to connect
+				// 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8090');
 
-					// Request methods you wish to allow
-					res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+				// 	// Request methods you wish to allow
+				// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-					// Request headers you wish to allow
-					res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+				// 	// Request headers you wish to allow
+				// 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-					// Set to true if you need the website to include cookies in the requests sent
-					// to the API (e.g. in case you use sessions)
-					res.setHeader('Access-Control-Allow-Credentials', true);
+				// 	// Set to true if you need the website to include cookies in the requests sent
+				// 	// to the API (e.g. in case you use sessions)
+				// 	res.setHeader('Access-Control-Allow-Credentials', true);
 
-					// Pass to next layer of middleware
-					next();
-				});
+				// 	// Pass to next layer of middleware
+				// 	next();
+				// });
 			}
 
 			itemEndpoints(app, pool, handleError)
