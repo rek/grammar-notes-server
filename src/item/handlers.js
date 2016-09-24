@@ -6,7 +6,10 @@ let endpoints = (app, pool, handleError) => {
 
 	app.get('/api/item/:itemId', function(req, res) {
 		console.log('[GET] Route matched:', '/api/item/:itemId');
-		pool.query(`SELECT * FROM ${table} where item_id = "${req.params.itemId}"`, function(err, result) {
+		let query = `SELECT * FROM ${table} where item_id = "${req.params.itemId}"`
+		console.log('Query:', query);
+
+		pool.query(query, function(err, result) {
 			// handle an error from the query
 			if (err) {
 				return handleError(err, res)
@@ -87,9 +90,10 @@ let endpoints = (app, pool, handleError) => {
 	})
 
 	app.post('/api/items', function(req, res) {
-		let validItems = {}
+		console.log('[POST] Route matched:', '/api/items');
+		console.log('Raw:', req.body);
 
-		// console.log('Raw:', req.body);
+		let validItems = {}
 
 		// validation
 		if (_.isString(req.body.item_title) && req.body.item_title !== '') {
