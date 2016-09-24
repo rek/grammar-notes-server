@@ -4,6 +4,67 @@ import {inserter} from '../utils'
 let endpoints = (app, pool, handleError) => {
 	let table = 'item'
 
+	app.get('/api/item/:itemId', function(req, res) {
+		console.log('[GET] Route matched:', '/api/item/:itemId');
+		pool.query(`SELECT * FROM ${table} where item_id = "${req.params.itemId}"`, function(err, result) {
+			// handle an error from the query
+			if (err) {
+				return handleError(err, res)
+			}
+
+			console.log('Result:', result.rows);
+			// working:
+			// res.setHeader('Content-Type', 'application/json');
+			// res.send(JSON.stringify(result.rows));
+			// working:
+			res.json(result.rows);
+
+			// not working:
+			// res.writeHead(200, {'content-type': 'application/json'})
+			// res.send(JSON.stringify(result.rows)) // JSON string on GET
+			// res.end()
+		})
+	})
+
+	app.post('/api/item/:itemId', function(req, res) {
+		console.log('[POST] Route matched:', '/api/item/:itemId');
+
+		let updateTitle = '',
+			updateContent = ''
+
+		if (req.body.title !== undefined) {
+			updateTitle = `item_title = "${req.body.title}" `
+		}
+
+		if (req.body.content !== undefined) {
+			updateContent = `content = "${req.body.content}" `
+		}
+
+		if (!updateTitle && updateContent) {
+			console.log('NO CONTENT ERROR PLZ');
+			return false;
+		}
+
+		pool.query(`UPDATE ${table} SET ${updateTitle} ${updateContent} where item_id = "${req.params.itemId}"`, function(err, result) {
+			// handle an error from the query
+			if (err) {
+				return handleError(err, res)
+			}
+
+			console.log('Result:', result.rows);
+			// working:
+			// res.setHeader('Content-Type', 'application/json');
+			// res.send(JSON.stringify(result.rows));
+			// working:
+			res.json(result.rows);
+
+			// not working:
+			// res.writeHead(200, {'content-type': 'application/json'})
+			// res.send(JSON.stringify(result.rows)) // JSON string on GET
+			// res.end()
+		})
+	})
+
 	app.get('/api/items', function(req, res) {
 		pool.query(`SELECT * FROM ${table}`, function(err, result) {
 			// handle an error from the query
