@@ -12,7 +12,7 @@ let endpoints = (app, pool, handleError) => {
 		pool.query(query, function(err, result) {
 			// handle an error from the query
 			if (err) {
-				return handleError(err, res)
+				return handleError(err, req, res)
 			}
 
 			console.log('Result:', result.rows);
@@ -20,7 +20,11 @@ let endpoints = (app, pool, handleError) => {
 			// res.setHeader('Content-Type', 'application/json');
 			// res.send(JSON.stringify(result.rows));
 			// working:
-			res.json(result.rows);
+			// res.json(result.rows);
+
+			res.status(200)
+			res.send(JSON.stringify(result.rows)) // JSON string on GET
+			// res.end()
 
 			// not working:
 			// res.writeHead(200, {'content-type': 'application/json'})

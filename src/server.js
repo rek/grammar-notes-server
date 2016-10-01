@@ -22,7 +22,7 @@ let app = express(),
 app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
-// app.set('views', __dirname + '/../client')
+app.set('views', __dirname)
 // app.use('/scripts', express.static(__dirname + '/../client/scripts'))
 // app.use('/styles', express.static(__dirname + '/../client/styles'))
 // app.use('/config.js', express.static(__dirname + '/../../config.js'))
@@ -85,9 +85,12 @@ let runServer = () => {
 				// 	next();
 				// });
 			}
-
-			itemEndpoints(app, pool, handleError)
-			tagEndpoints(app, pool, handleError)
+			function errorHandler(err, req, res, next) {
+				res.status(500);
+				res.send({error: err});
+			}
+			itemEndpoints(app, pool, errorHandler)
+			tagEndpoints(app, pool, errorHandler)
 
 			// let sendHtml = (req, res) => res.render(devMode ? 'index.html' : 'index.prod.html')
 
@@ -110,10 +113,6 @@ let runServer = () => {
 				} else {
 					next(err);
 				}
-			}
-			function errorHandler(err, req, res, next) {
-				res.status(500);
-				res.render('error', { error: err });
 			}
 			app.use(logErrors);
 			app.use(clientErrorHandler);
