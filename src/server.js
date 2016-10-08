@@ -35,28 +35,22 @@ app.use(bodyParser.json())
 // uses vars from env
 let pool = new Pool()
 
-let handleError = (error, res) => {
-	// console.log(error.message, error.stack)
-	res.writeHead(500, {'content-type': 'text/plain'})
-	// res.status(code || 500).json({'error': message})
-	console.error('Error:', error)
-	console.error('res:', res)
+// let handleError = (error, res) => {
+// 	// console.log(error.message, error.stack)
+// 	res.writeHead(500, {'content-type': 'text/plain'})
+// 	// res.status(code || 500).json({'error': message})
+// 	console.error('Error:', error)
+// 	console.error('res:', res)
 
-	res.send('Error:', error.stack)
+// 	res.send('Error:', error.stack)
 
-	res.end('An error occurred')
-}
+// 	res.end('An error occurred')
+// }
 
 let runServer = () => {
 	setupDB(pool)
 		.then(() => {
 			console.log('DB Initialized, starting server.')
-
-			// if (devMode) {
-			// 	console.log('Loading...');
-			// 	require('chokidar-socket-emitter')({port: 5667});
-				// require('chokidar-socket-emitter')({port: 8070, path: 'dist/client/scripts'});
-			// }
 
 			if (devMode) {
 				console.log('Loading CORS Headers...');
@@ -81,37 +75,35 @@ let runServer = () => {
 				// 	next();
 				// });
 			}
-			function errorHandler(err, req, res, next) {
+
+			let errorHandler = (err, req, res, next) => {
 				res.status(500);
 				res.send({error: err});
 			}
+
 			itemEndpoints(app, pool, errorHandler)
 			tagEndpoints(app, pool, errorHandler)
 
-			// let sendHtml = (req, res) => res.render(devMode ? 'index.html' : 'index.prod.html')
-
 			// so all routes after we have attached api routes
-			// app.get('/items/*', sendHtml)
-			// app.get('/items', sendHtml)
-			// app.get('/', sendHtml)
 			app.get('/health', function(req, res) {
 				res.send('OK')
 			})
 
-			// error handling
-			function logErrors(err, req, res, next) {
+			// log errors
+			app.use((err, req, res, next) => {
 				console.error(err.stack);
 				next(err);
-			}
-			function clientErrorHandler(err, req, res, next) {
+			});
+
+			// error handling (clientErrorHandler)
+			app.use((err, req, res, next) => {
 				if (req.xhr) {
 					res.status(500).send({ error: 'Something failed!' });
 				} else {
 					next(err);
 				}
-			}
-			app.use(logErrors);
-			app.use(clientErrorHandler);
+			});
+
 			app.use(errorHandler);
 
 			app.listen(config.port, config.ip)
