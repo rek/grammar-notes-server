@@ -23,11 +23,7 @@ app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
 app.set('views', __dirname)
-// app.use('/scripts', express.static(__dirname + '/../client/scripts'))
-// app.use('/styles', express.static(__dirname + '/../client/styles'))
-// app.use('/config.js', express.static(__dirname + '/../../config.js'))
-// app.use('/jspm_packages', express.static(__dirname + '/../../jspm_packages'))
-// app.use('/favicon.ico', express.static(__dirname + '/../client/favicon.ico'))
+app.use('/favicon.ico', express.static(__dirname + '/favicon.ico'))
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST

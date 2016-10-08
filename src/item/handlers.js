@@ -6,7 +6,7 @@ let endpoints = (app, pool, handleError) => {
 
 	app.get('/api/item/:itemId', function(req, res) {
 		console.log('[GET] Route matched:', '/api/item/:itemId');
-		let query = `SELECT * FROM ${table} where item_id = "${req.params.itemId}"`
+		let query = `SELECT * FROM ${table} where item_id = ${req.params.itemId}`
 		console.log('Query:', query);
 
 		pool.query(query, function(err, result) {
@@ -16,14 +16,23 @@ let endpoints = (app, pool, handleError) => {
 			}
 
 			console.log('Result:', result.rows);
+
+			if (result.rows) {
+				let data = _.first(result.rows)
+				// console.log('data', data);
+				return res.json(data);
+			}
+
+			return handleError(err, req, res)
+
 			// working:
 			// res.setHeader('Content-Type', 'application/json');
 			// res.send(JSON.stringify(result.rows));
 			// working:
 			// res.json(result.rows);
 
-			res.status(200)
-			res.send(JSON.stringify(result.rows)) // JSON string on GET
+			// res.status(200)
+			// res.send(JSON.stringify(result.rows)) // JSON string on GET
 			// res.end()
 
 			// not working:
@@ -40,22 +49,25 @@ let endpoints = (app, pool, handleError) => {
 			updateContent = ''
 
 		if (req.body.title !== undefined) {
-			updateTitle = `item_title = "${req.body.title}" `
+			updateTitle = `item_title = '${req.body.title}' `
 		}
 
 		if (req.body.content !== undefined) {
-			updateContent = `content = "${req.body.content}" `
+			updateContent = `content = '${req.body.content}' `
 		}
 
-		if (!updateTitle && updateContent) {
+		if (!updateTitle && !updateContent) {
 			console.log('NO CONTENT ERROR PLZ');
 			return false;
 		}
 
-		pool.query(`UPDATE ${table} SET ${updateTitle} ${updateContent} where item_id = "${req.params.itemId}"`, function(err, result) {
+		let query = `UPDATE ${table} SET ${updateTitle} ${updateContent} where item_id = '${req.params.itemId}'`
+		console.log('Query:', query);
+
+		pool.query(query, function(err, result) {
 			// handle an error from the query
 			if (err) {
-				return handleError(err, res)
+				return handleError(err, req, res)
 			}
 
 			console.log('Result:', result.rows);
@@ -73,10 +85,11 @@ let endpoints = (app, pool, handleError) => {
 	})
 
 	app.get('/api/items', function(req, res) {
+		console.log('[GET] Route matched:', '/api/items');
 		pool.query(`SELECT * FROM ${table}`, function(err, result) {
 			// handle an error from the query
 			if (err) {
-				return handleError(err, res)
+				return handleError(err, req, res)
 			}
 
 			console.log('Result:', result.rows);
@@ -117,7 +130,7 @@ let endpoints = (app, pool, handleError) => {
 		pool.query(sql.query, sql.data, (err) => {
 
 			if (err) {
-				return handleError(err, res)
+				return handleError(err, req, res)
 			}
 
 			res.json({success: true});
