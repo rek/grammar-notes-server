@@ -4,8 +4,8 @@
   "description": "API for Grammar Notes system.",
   "main": "server.js",
   "engine": {
-    "node": "*",
-    "npm": "*"
+    "node": "6.x",
+    "npm": "3.x"
   },
   "paths": {
     "bower": "bower_components",
