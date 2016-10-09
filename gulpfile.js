@@ -1,3 +1,5 @@
+'use strict';
+
 let gulp = require('gulp'),
 	merge = require('merge-stream'),
 	plugins = require('gulp-load-plugins')();
