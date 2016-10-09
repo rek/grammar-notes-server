@@ -15,7 +15,6 @@ import tagEndpoints from './tag/handlers.js'
 
 Object.assign = require('object-assign')
 
-console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
 
 let app = express(),
 	Pool = pg.Pool,
@@ -35,7 +34,8 @@ app.use(bodyParser.json())
 // create the pool somewhere globally so its lifetime
 // lasts for as long as your app is running
 // uses vars from env
-let pool = new Pool()
+// console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
+let pool = new Pool(process.env.DATABASE_URL)
 
 // let handleError = (error, res) => {
 // 	// console.log(error.message, error.stack)
