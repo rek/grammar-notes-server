@@ -1,12 +1,13 @@
 import _ from 'lodash'
-import {inserter} from '../utils'
+import {inserter, updater} from '../utils'
 
 let endpoints = (app, pool, handleError) => {
 	let table = 'item'
+	let pk = 'item_id'
 
 	app.get('/api/item/:itemId', function(req, res) {
 		console.log('[GET] Route matched:', '/api/item/:itemId');
-		let query = `SELECT * FROM ${table} where item_id = ${req.params.itemId}`
+		let query = `SELECT * FROM ${table} where ${pk} = ${req.params.itemId}`
 		console.log('Query:', query);
 
 		pool.query(query, function(err, result) {
@@ -42,29 +43,28 @@ let endpoints = (app, pool, handleError) => {
 		})
 	})
 
-	app.post('/api/item/:itemId', function(req, res) {
+	app.put('/api/item/:itemId', function(req, res) {
 		console.log('[POST] Route matched:', '/api/item/:itemId');
 
-		let updateTitle = '',
-			updateContent = ''
+		let validItems = []
 
-		if (req.body.title !== undefined) {
-			updateTitle = `item_title = '${req.body.title}' `
+		if (req.body.item_title !== undefined) {
+			validItems.push(`item_title = '${req.body.item_title}' `)
 		}
 
 		if (req.body.content !== undefined) {
-			updateContent = `content = '${req.body.content}' `
+			validItems.push(`content = '${req.body.content}' `)
 		}
 
-		if (!updateTitle && !updateContent) {
+		if (validItems.length === 0) {
 			console.log('NO CONTENT ERROR PLZ');
 			return false;
 		}
 
-		let query = `UPDATE ${table} SET ${updateTitle} ${updateContent} where item_id = '${req.params.itemId}'`
-		console.log('Query:', query);
+		let sql = updater(table, pk, req.params.itemId, validItems)
+		console.log('Query:', sql.query);
 
-		pool.query(query, function(err, result) {
+		pool.query(sql.query, function(err, result) {
 			// handle an error from the query
 			if (err) {
 				return handleError(err, req, res)

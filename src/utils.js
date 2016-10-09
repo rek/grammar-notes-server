@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-let inserter = (table, items) => {
+export const inserter = (table, items) => {
 	let validKeys = _.keys(items).join(', '),
 		countKeys = _.reduce(items, (results) => {
 			results.push('$' + (results.length + 1))
@@ -14,4 +14,17 @@ let inserter = (table, items) => {
 	}
 }
 
-export {inserter}
+export const updater = (table, pk, pkValue, items = []) => {
+	let values = []
+
+	// for (value of items) => {
+
+	// }
+
+	values = items.join(', ')
+	// values = unescape(items.join(', '))
+
+	return {
+		query: `UPDATE ${table} SET ${values} where ${pk}= ${pkValue}`,
+	}
+}
