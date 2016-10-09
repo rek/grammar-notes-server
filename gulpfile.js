@@ -19,9 +19,8 @@ gulp.task('test', ['build'], function() {
 })
 
 gulp.task('clean', function() {
-	let server = gulp.src('src')
+	let server = gulp.src('dist')
 		.pipe(plugins.clean({force: true}))
-		.pipe(gulp.dest('dist'))
 
 	return merge(server);
 });

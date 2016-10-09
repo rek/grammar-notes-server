@@ -1,8 +1,8 @@
 {
   "name": "grammar-notes-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "API for Grammar Notes system.",
-  "main": "server.js",
+  "main": "dist/server.js",
   "engine": {
     "node": "6.x",
     "npm": "3.x"
@@ -16,8 +16,8 @@
     "test": true
   },
   "scripts": {
-    "start": "node server.js",
-    "hero": "heroku local web",
+    "start": "node dist/server.js",
+    "hero": "heroku local server",
     "test": "gulp test",
     "build": "gulp build"
   },
