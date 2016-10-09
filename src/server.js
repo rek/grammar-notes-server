@@ -20,7 +20,7 @@ let app = express(),
 	Pool = pg.Pool,
 	devMode = config.env !== 'production'
 
-app.engine('html', require('ejs').renderFile)
+	app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
 app.set('views', __dirname)
@@ -126,6 +126,11 @@ let runServer = () => {
 		})
 }
 
-runServer()
+// runServer()
+
+var pg = require('pg').native
+pg.connect(process.env.DATABASE_URL, function (err, conn, done) {
+    console.log('DB Initialized, starting server.')
+})
 
 export default app
