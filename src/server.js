@@ -34,8 +34,7 @@ app.use(bodyParser.json())
 // create the pool somewhere globally so its lifetime
 // lasts for as long as your app is running
 // uses vars from env
-// console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
-let pool = new Pool(process.env.DATABASE_URL)
+let pool = new Pool()
 
 // let handleError = (error, res) => {
 // 	// console.log(error.message, error.stack)
@@ -50,7 +49,11 @@ let pool = new Pool(process.env.DATABASE_URL)
 // }
 
 let runServer = () => {
-	setupDB(pool)
+	pg.defaults.ssl = true;
+	pg.connect(process.env.DATABASE_URL, function(err, client) {
+		if (err) throw err;
+
+	setupDB(client)
 		.then(() => {
 			console.log('DB Initialized, starting server.')
 
@@ -124,20 +127,9 @@ let runServer = () => {
 				runServer()
 			}
 		})
+	})
 }
 
 // runServer()
-
-pg.defaults.ssl = true;
-pg.connect(process.env.DATABASE_URL, function(err, client) {
-  if (err) throw err;
-  console.log('Connected to postgres! Getting schemas...');
-
-  client
-    .query('SELECT table_schema,table_name FROM information_schema.tables;')
-    .on('row', function(row) {
-      console.log(JSON.stringify(row));
-    });
-});
 
 export default app
