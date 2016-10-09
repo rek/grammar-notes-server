@@ -128,8 +128,8 @@ let runServer = () => {
 
 // runServer()
 
-var pg = require('pg').native
-pg.connect(process.env.DATABASE_URL, function (err, conn, done) {
+let a = require('pg').native
+a.connect(process.env.DATABASE_URL, function (err, conn, done) {
     console.log('DB Initialized, starting server.')
 })
 
