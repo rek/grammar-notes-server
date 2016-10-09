@@ -1,5 +1,4 @@
 let gulp = require('gulp'),
-	pkg = require('./package.json'),
 	merge = require('merge-stream'),
 	plugins = require('gulp-load-plugins')();
 
@@ -60,3 +59,5 @@ gulp.task('nodemon', function() {
 gulp.task('start', ['watch', 'nodemon'], function() {
 
 })
+
+gulp.task('build', ['js'])
