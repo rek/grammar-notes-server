@@ -106,8 +106,13 @@ let runServer = () => {
 
 			app.use(errorHandler);
 
-			app.listen(config.port, config.ip)
-			console.log('Server running on http://%s:%s', config.ip, config.port)
+			app.listen(config.port, () => {
+				let port = server.address().port;
+				console.log('Server now running on port', port);
+			});
+
+			// app.listen(config.port, config.ip)
+			// console.log('Server running on http://%s:%s', config.ip, config.port)
 		})
 		.catch((error) => {
 			console.log('Error:', error)
