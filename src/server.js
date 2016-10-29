@@ -16,11 +16,11 @@ import tagEndpoints from './tag/handlers.js'
 Object.assign = require('object-assign')
 
 
-let app = express(),
-	Pool = pg.Pool,
-	devMode = config.env !== 'production'
+let app = express()
+let Pool = pg.Pool
+let devMode = config.env !== 'production'
 
-	app.engine('html', require('ejs').renderFile)
+app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
 app.set('views', __dirname)
@@ -48,6 +48,8 @@ let pool = new Pool()
 // 	res.end('An error occurred')
 // }
 
+devMode && console.log('Init stage:', 1);
+
 let runServer = () => {
 	pg.defaults.ssl = true;
 	pg.connect(process.env.DATABASE_URL, function(err, client) {
@@ -56,6 +58,7 @@ let runServer = () => {
 	setupDB(client)
 		.then(() => {
 			console.log('DB Initialized, starting server.')
+			devMode && console.log('Init stage:', 2);
 
 			if (devMode) {
 				console.log('Loading CORS Headers...');
@@ -111,7 +114,9 @@ let runServer = () => {
 
 			app.use(errorHandler);
 
-			app.listen(config.port, () => {
+			devMode && console.log('Init stage:', 3);
+
+			let server = app.listen(config.port, () => {
 				let port = server.address().port;
 				console.log('Server now running on port', port);
 			});
@@ -130,6 +135,6 @@ let runServer = () => {
 	})
 }
 
-// runServer()
+runServer()
 
 export default app
