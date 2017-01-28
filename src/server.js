@@ -5,7 +5,6 @@ import express from 'express'
 import cors from 'cors'
 
 // import fs from 'fs'
-// import eps from 'ejs'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import setupDB from './setupDb.js'
@@ -18,6 +17,7 @@ Object.assign = require('object-assign')
 let app = express()
 let Pool = pg.Pool
 
+// import eps from 'ejs'
 app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
@@ -50,6 +50,7 @@ config.devMode && console.log('Init stage:', 1);
 
 let runServer = () => {
 	pg.defaults.ssl = true;
+	console.log('Yes i know this is bad:', process.env.DATABASE_URL);
 	pg.connect(process.env.DATABASE_URL, function(err, client) {
 		if (err) throw err;
 
