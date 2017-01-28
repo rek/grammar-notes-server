@@ -11,3 +11,7 @@ API for Grammar notes
 
 ```
 ```
+
+## License
+
+This project is licensed under the MIT license, Copyright (c) 2016 Adam Tombleson. For more information see `LICENSE`.
