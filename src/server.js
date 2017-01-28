@@ -117,8 +117,9 @@ let runServer = () => {
 			devMode && console.log('Init stage:', 3);
 
 			let server = app.listen(config.port, () => {
-				let port = server.address().port;
-				console.log('Server now running on port', port);
+				let address = server.address()
+
+				console.log(`Server now running on: ${address.address}:${address.port}`);
 			});
 
 			// app.listen(config.port, config.ip)
