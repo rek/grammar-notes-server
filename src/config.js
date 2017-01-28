@@ -10,4 +10,6 @@ config.ip = process.env.IP || '0.0.0.0'
 
 config.env = !process.env.NODE_ENV || process.env.NODE_ENV !== 'production'
 
+config.devMode = config.env !== 'production'
+
 export default config

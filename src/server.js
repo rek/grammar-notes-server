@@ -17,7 +17,6 @@ Object.assign = require('object-assign')
 
 let app = express()
 let Pool = pg.Pool
-let devMode = config.env !== 'production'
 
 app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
@@ -47,7 +46,7 @@ let pool = new Pool()
 // 	res.end('An error occurred')
 // }
 
-devMode && console.log('Init stage:', 1);
+config.devMode && console.log('Init stage:', 1);
 
 let runServer = () => {
 	pg.defaults.ssl = true;
@@ -57,9 +56,9 @@ let runServer = () => {
 	setupDB(client)
 		.then(() => {
 			console.log('DB Initialized, starting server.')
-			devMode && console.log('Init stage:', 2);
+			config.devMode && console.log('Init stage:', 2);
 
-			if (devMode) {
+			if (config.devMode) {
 				console.log('Loading CORS Headers...');
 				app.use(cors());
 
@@ -113,7 +112,7 @@ let runServer = () => {
 
 			app.use(errorHandler);
 
-			devMode && console.log('Init stage:', 3);
+			config.devMode && console.log('Init stage:', 3);
 
 			let server = app.listen(config.port, () => {
 				let address = server.address()
