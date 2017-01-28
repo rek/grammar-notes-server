@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "API for Grammar Notes system.",
   "main": "dist/server.js",
-  "engine": {
+  "engines": {
     "node": "6.x",
     "npm": "3.x"
   },
