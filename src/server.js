@@ -50,95 +50,93 @@ config.devMode && console.log('Init stage:', 1);
 
 let runServer = () => {
 	pool.connect(function(err, client, done) {
-	// pg.defaults.ssl = true;
-	// pg.connect(process.env.DATABASE_URL, function(err, client) {
-	// 	if (err) throw err;
-	if(err) {
-		return console.error('Error fetching client from pool', err);
-	}
 
-	setupDB(client)
-		.then(() => {
-			console.log('DB Initialized, starting server.')
-			config.devMode && console.log('Init stage:', 2);
+		if(err) {
+			return console.error('Error fetching client from pool', err);
+		}
 
-			if (config.devMode) {
-				console.log('Loading CORS Headers...');
-				app.use(cors());
+		setupDB(client)
+			.then(() => {
+				console.log('DB Initialized, starting server.')
+				config.devMode && console.log('Init stage:', 2);
 
-				// Add CORS headers - DEV
-				// app.use(function (req, res, next) {
-				// 	// Website you wish to allow to connect
-				// 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8090');
+				if (config.devMode) {
+					console.log('Loading CORS Headers...');
+					app.use(cors());
 
-				// 	// Request methods you wish to allow
-				// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+					// Add CORS headers - DEV
+					// app.use(function (req, res, next) {
+					// 	// Website you wish to allow to connect
+					// 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8090');
 
-				// 	// Request headers you wish to allow
-				// 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+					// 	// Request methods you wish to allow
+					// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-				// 	// Set to true if you need the website to include cookies in the requests sent
-				// 	// to the API (e.g. in case you use sessions)
-				// 	res.setHeader('Access-Control-Allow-Credentials', true);
+					// 	// Request headers you wish to allow
+					// 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-				// 	// Pass to next layer of middleware
-				// 	next();
-				// });
-			}
+					// 	// Set to true if you need the website to include cookies in the requests sent
+					// 	// to the API (e.g. in case you use sessions)
+					// 	res.setHeader('Access-Control-Allow-Credentials', true);
 
-			let errorHandler = (err, req, res, next) => {
-				res.status(500);
-				res.send({error: err});
-			}
-
-			itemEndpoints(app, pool, errorHandler)
-			tagEndpoints(app, pool, errorHandler)
-
-			// so all routes after we have attached api routes
-			app.get('/health', function(req, res) {
-				res.send('OK')
-			})
-
-			app.get('/', function(req, res) {
-				res.send('THIS IS THE API FOR: <a href="https://grammar-manager.herokuapp.com">https://grammar-manager.herokuapp.com</a>')
-			})
-
-			// log errors
-			app.use((err, req, res, next) => {
-				console.error(err.stack);
-				next(err);
-			});
-
-			// error handling (clientErrorHandler)
-			app.use((err, req, res, next) => {
-				if (req.xhr) {
-					res.status(500).send({ error: 'Something failed!' });
-				} else {
-					next(err);
+					// 	// Pass to next layer of middleware
+					// 	next();
+					// });
 				}
-			});
 
-			app.use(errorHandler);
+				let errorHandler = (err, req, res, next) => {
+					res.status(500);
+					res.send({error: err});
+				}
 
-			config.devMode && console.log('Init stage:', 3);
+				itemEndpoints(app, pool, errorHandler)
+				tagEndpoints(app, pool, errorHandler)
 
-			let server = app.listen(config.port, () => {
-				let address = server.address()
+				// so all routes after we have attached api routes
+				app.get('/health', function(req, res) {
+					res.send('OK')
+				})
 
-				console.log(`Server now running on: ${address.address}:${address.port}`);
-			});
+				app.get('/', function(req, res) {
+					res.send('THIS IS THE API FOR: <a href="https://grammar-manager.herokuapp.com">https://grammar-manager.herokuapp.com</a>')
+				})
 
-			// app.listen(config.port, config.ip)
-			// console.log('Server running on http://%s:%s', config.ip, config.port)
-		})
-		.catch((error) => {
-			console.log('Error:', error)
+				// log errors
+				app.use((err, req, res, next) => {
+					console.error(err.stack);
+					next(err);
+				});
 
-			// if error is not catastropic, restart:
-			if (false) {
-				runServer()
-			}
-		})
+				// error handling (clientErrorHandler)
+				app.use((err, req, res, next) => {
+					if (req.xhr) {
+						res.status(500).send({ error: 'Something failed!' });
+					} else {
+						next(err);
+					}
+				});
+
+				app.use(errorHandler);
+
+				config.devMode && console.log('Init stage:', 3);
+
+				let server = app.listen(config.port, () => {
+					let address = server.address()
+
+					console.log(`Server now running on: ${address.address}:${address.port}`);
+				});
+
+				// app.listen(config.port, config.ip)
+				// console.log('Server running on http://%s:%s', config.ip, config.port)
+			})
+			.catch((error) => {
+				console.log('Error:', error)
+
+				// if error is not catastropic, restart:
+				if (false) {
+					runServer()
+				}
+			})
 	})
 }
 
