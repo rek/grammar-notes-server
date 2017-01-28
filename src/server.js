@@ -22,7 +22,7 @@ app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
 app.set('views', __dirname)
-// app.use('/favicon.ico', express.static(__dirname + '/favicon.ico'))
+app.use('/favicon.ico', express.static(__dirname + '/favicon.ico'))
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 // create the pool somewhere globally so its lifetime
 // lasts for as long as your app is running
 // uses vars from env
-let pool = new Pool()
+let pool = new Pool(process.env.DATABASE_URL)
 
 // let handleError = (error, res) => {
 // 	// console.log(error.message, error.stack)
@@ -49,10 +49,13 @@ let pool = new Pool()
 config.devMode && console.log('Init stage:', 1);
 
 let runServer = () => {
-	pg.defaults.ssl = true;
-	console.log('Yes i know this is bad:', process.env.DATABASE_URL);
-	pg.connect(process.env.DATABASE_URL, function(err, client) {
-		if (err) throw err;
+	pool.connect(function(err, client, done) {
+	// pg.defaults.ssl = true;
+	// pg.connect(process.env.DATABASE_URL, function(err, client) {
+	// 	if (err) throw err;
+	if(err) {
+		return console.error('Error fetching client from pool', err);
+	}
 
 	setupDB(client)
 		.then(() => {
@@ -97,7 +100,7 @@ let runServer = () => {
 			})
 
 			app.get('/', function(req, res) {
-				res.send('THIS IS THE API FOR: https://grammar-manager.herokuapp.com')
+				res.send('THIS IS THE API FOR: <a href="https://grammar-manager.herokuapp.com">https://grammar-manager.herokuapp.com</a>')
 			})
 
 			// log errors
