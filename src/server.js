@@ -15,7 +15,6 @@ import tagEndpoints from './tag/handlers.js'
 
 Object.assign = require('object-assign')
 
-
 let app = express()
 let Pool = pg.Pool
 let devMode = config.env !== 'production'
