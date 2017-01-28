@@ -24,7 +24,7 @@ app.engine('html', require('ejs').renderFile)
 app.use(morgan('combined'))
 
 app.set('views', __dirname)
-app.use('/favicon.ico', express.static(__dirname + '/favicon.ico'))
+// app.use('/favicon.ico', express.static(__dirname + '/favicon.ico'))
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
