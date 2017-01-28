@@ -95,6 +95,10 @@ let runServer = () => {
 				res.send('OK')
 			})
 
+			app.get('/', function(req, res) {
+				res.send('THIS IS THE API FOR: https://grammar-manager.herokuapp.com')
+			})
+
 			// log errors
 			app.use((err, req, res, next) => {
 				console.error(err.stack);
