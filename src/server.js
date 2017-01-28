@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 // create the pool somewhere globally so its lifetime
 // lasts for as long as your app is running
 // uses vars from env
-let pool = new Pool(process.env.DATABASE_URL)
+let pool = new Pool()
 
 // let handleError = (error, res) => {
 // 	// console.log(error.message, error.stack)
