@@ -2,14 +2,42 @@
 
 API for Grammar notes
 
-## To build:
+## Database setup and notes:
+
+Install a PG server.
+
+...
+
+Make sure PG is running
+
+See if PG is running by trying to create a db:
 
 ```
+$ createdb test
+$ dropdb test
+```
+
+To connect to the db:
+```
+$ psql -U rekarnar -d grammar
+```
+
+To quit:
+```
+$ test=> \q
+```
+
+## Dev:
+
+
+```
+$ gulp start
 ```
 
 ## To run:
 
 ```
+$ gulp clean && gulp build && node dist/server.js
 ```
 
 ## License
